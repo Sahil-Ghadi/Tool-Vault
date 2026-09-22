@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛠 Tool Vault
+
+A personal tool bookmarking app built with Next.js, Supabase, and Tailwind CSS. Save tools you discover so you never forget them — with live website previews, tags, and search.
+
+## Features
+
+- **Save tools** — paste a URL and name, add an optional description and tags
+- **Live preview** — see the website in an iframe as you type the URL
+- **Card grid** — click any card to toggle a live preview of the site
+- **Search** — filter tools by name, URL, or description
+- **Tag filtering** — filter by tag with one click
+- **Delete** — remove tools you no longer need
+- **Persistent** — all tools stored in Supabase Postgres
+
+## Tech Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Database | Supabase (Postgres) |
+| Icons | Lucide React |
 
 ## Getting Started
 
-First, run the development server:
+### 1. Set up Supabase
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Create a free project at [supabase.com](https://supabase.com)
+2. Go to **SQL Editor** and run the contents of [`supabase-schema.sql`](./supabase-schema.sql)
+
+### 2. Configure environment variables
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Both values are in your Supabase project under **Settings → API**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Install dependencies and run
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/
+├── api/tools/
+│   ├── route.ts          # GET (list) + POST (save) tools
+│   └── [id]/route.ts     # DELETE a tool
+├── page.tsx              # Main UI
+└── layout.tsx
+lib/
+├── supabase.ts           # Supabase client
+└── types.ts              # Tool type definition
+supabase-schema.sql       # SQL schema to run in Supabase
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploying
 
-## Deploy on Vercel
+The easiest way to deploy is [Vercel](https://vercel.com):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push to GitHub (already done ✅)
+2. Import the repo at [vercel.com/new](https://vercel.com/new)
+3. Add your `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` environment variables
+4. Deploy
