@@ -34,7 +34,9 @@ export default function Home() {
     setLoading(false);
   }
 
-  useEffect(() => { fetchTools(); }, []);
+  useEffect(() => {
+    fetchTools();
+  }, []);
 
   // ── live preview: debounce URL changes ───────────────────────────────────
   useEffect(() => {
@@ -78,8 +80,13 @@ export default function Home() {
     if (res.ok) {
       const saved: Tool = await res.json();
       setTools([saved, ...tools]);
-      setName(""); setUrl(""); setDescription(""); setTags([]); setTagInput("");
-      setPreviewUrl(""); setShowForm(false);
+      setName("");
+      setUrl("");
+      setDescription("");
+      setTags([]);
+      setTagInput("");
+      setPreviewUrl("");
+      setShowForm(false);
     }
     setSaving(false);
   }
@@ -105,173 +112,172 @@ export default function Home() {
 
   // ── render ────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      {/* ── header ── */}
-      <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-              🛠 Tool Vault
-            </h1>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              Your personal collection of discovered tools
+    <div className="min-h-screen bg-white">
+      {/* ── HEADER ── */}
+      <header className="sticky top-0 z-50 bg-white border-b-4 border-black">
+        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-6 flex items-end justify-between gap-8">
+          <div className="flex-1">
+            <div className="flex items-baseline gap-4">
+              <span className="swiss-label text-[#FF3000] tracking-[0.2em]">01.</span>
+              <h1 className="swiss-heading text-4xl md:text-6xl lg:text-7xl">
+                TOOL VAULT
+              </h1>
+            </div>
+            <p className="mt-4 text-sm md:text-base max-w-xl uppercase tracking-wide font-medium">
+              YOUR PERSONAL COLLECTION OF DISCOVERED TOOLS
             </p>
           </div>
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="flex items-center gap-2 rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="flex-none h-16 px-8 bg-black text-white uppercase tracking-widest text-xs font-bold transition-all duration-150 hover:bg-[#FF3000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3000] focus-visible:ring-offset-2"
+            style={{ borderRadius: 0 }}
           >
-            <Plus className="h-4 w-4" />
-            Add Tool
+            <Plus className="inline h-4 w-4 mr-2 transition-transform duration-200" style={{ transform: showForm ? 'rotate(45deg)' : 'rotate(0deg)' }} />
+            {showForm ? "CLOSE" : "ADD TOOL"}
           </button>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
-        {/* ── add form ── */}
+      <main className="mx-auto max-w-7xl px-6 lg:px-12 py-12">
+        {/* ── ADD FORM ── */}
         {showForm && (
-          <div className="mb-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">
-                Add a new tool
-              </h2>
-              <button
-                onClick={() => setShowForm(false)}
-                className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+          <div className="mb-12 border-4 border-black bg-[#F2F2F2] swiss-grid-pattern relative">
+            <div className="p-8 md:p-12">
+              <div className="mb-8 flex items-baseline gap-4">
+                <span className="swiss-label text-[#FF3000] tracking-[0.2em]">02.</span>
+                <h2 className="swiss-heading text-2xl md:text-4xl">ADD NEW TOOL</h2>
+              </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              {/* left: form fields */}
-              <form onSubmit={handleSave} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    Tool name *
-                  </label>
-                  <input
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Linear, Raycast, Excalidraw"
-                    className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-400 focus:bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:bg-zinc-900"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    URL *
-                  </label>
-                  <input
-                    required
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="https://..."
-                    className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-400 focus:bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:bg-zinc-900"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    Description
-                  </label>
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="What does this tool do? Why is it useful?"
-                    rows={3}
-                    className="resize-none rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-zinc-400 focus:bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:bg-zinc-900"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    Tags{" "}
-                    <span className="font-normal text-zinc-400">
-                      (press Enter or comma to add)
-                    </span>
-                  </label>
-                  <div className="flex flex-wrap gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 focus-within:border-zinc-400 focus-within:bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:focus-within:border-zinc-500 dark:focus-within:bg-zinc-900">
-                    {tags.map((t) => (
-                      <span
-                        key={t}
-                        className="flex items-center gap-1 rounded-full bg-zinc-900 px-2 py-0.5 text-xs text-white dark:bg-zinc-50 dark:text-zinc-900"
-                      >
-                        {t}
-                        <button
-                          type="button"
-                          onClick={() => removeTag(t)}
-                          className="hover:opacity-70"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </span>
-                    ))}
+              <div className="grid gap-8 lg:grid-cols-2">
+                {/* LEFT: form fields */}
+                <form onSubmit={handleSave} className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="swiss-label text-black">TOOL NAME *</label>
                     <input
-                      value={tagInput}
-                      onChange={(e) => setTagInput(e.target.value)}
-                      onKeyDown={addTag}
-                      placeholder={tags.length === 0 ? "design, productivity, ai…" : ""}
-                      className="min-w-[120px] flex-1 bg-transparent text-sm text-zinc-900 outline-none dark:text-zinc-50"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="LINEAR, RAYCAST, EXCALIDRAW"
+                      className="border-b-2 border-black bg-transparent px-0 py-3 text-base font-medium uppercase tracking-wide placeholder:text-black/30 focus:outline-none focus:border-[#FF3000] transition-colors duration-150"
+                      style={{ borderRadius: 0 }}
                     />
                   </div>
-                </div>
 
-                <button
-                  type="submit"
-                  disabled={saving || !name.trim() || !url.trim()}
-                  className="mt-1 flex items-center justify-center gap-2 rounded-full bg-zinc-900 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
-                >
-                  {saving ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Saving…
-                    </>
-                  ) : (
-                    "Save Tool"
-                  )}
-                </button>
-              </form>
-
-              {/* right: live preview */}
-              <div className="flex flex-col gap-2">
-                <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                  Live preview
-                </p>
-                <div className="relative flex-1 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800" style={{ minHeight: 280 }}>
-                  {previewUrl ? (
-                    <iframe
-                      key={previewUrl}
-                      src={previewUrl}
-                      title="Site preview"
-                      className="h-full w-full"
-                      style={{ minHeight: 280, pointerEvents: "none" }}
-                      sandbox="allow-scripts allow-same-origin"
+                  <div className="flex flex-col gap-2">
+                    <label className="swiss-label text-black">URL *</label>
+                    <input
+                      required
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      placeholder="https://..."
+                      className="border-b-2 border-black bg-transparent px-0 py-3 text-base font-medium tracking-wide placeholder:text-black/30 focus:outline-none focus:border-[#FF3000] transition-colors duration-150"
+                      style={{ borderRadius: 0 }}
                     />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-zinc-400 dark:text-zinc-600" style={{ minHeight: 280 }}>
-                      <div className="text-center">
-                        <ExternalLink className="mx-auto mb-2 h-8 w-8 opacity-30" />
-                        <p className="text-sm">Enter a URL to see a preview</p>
-                      </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="swiss-label text-black">DESCRIPTION</label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="What does this tool do? Why is it useful?"
+                      rows={3}
+                      className="resize-none border-2 border-black bg-white px-4 py-3 text-sm leading-relaxed placeholder:text-black/30 focus:outline-none focus:border-[#FF3000] transition-colors duration-150"
+                      style={{ borderRadius: 0 }}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="swiss-label text-black">
+                      TAGS <span className="font-normal opacity-60">(PRESS ENTER OR COMMA)</span>
+                    </label>
+                    <div className="flex flex-wrap gap-2 border-2 border-black bg-white px-4 py-3 focus-within:border-[#FF3000] transition-colors duration-150" style={{ borderRadius: 0 }}>
+                      {tags.map((t) => (
+                        <span
+                          key={t}
+                          className="flex items-center gap-2 bg-black text-white px-3 py-1 text-xs uppercase tracking-wider font-bold"
+                        >
+                          {t}
+                          <button
+                            type="button"
+                            onClick={() => removeTag(t)}
+                            className="hover:text-[#FF3000] transition-colors duration-150"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      ))}
+                      <input
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        onKeyDown={addTag}
+                        placeholder={tags.length === 0 ? "DESIGN, PRODUCTIVITY, AI" : ""}
+                        className="min-w-[140px] flex-1 bg-transparent text-sm font-medium uppercase tracking-wide placeholder:text-black/30 focus:outline-none"
+                      />
                     </div>
-                  )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={saving || !name.trim() || !url.trim()}
+                    className="mt-4 h-14 bg-black text-white uppercase tracking-[0.15em] text-xs font-bold transition-all duration-150 hover:bg-[#FF3000] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3000] focus-visible:ring-offset-2"
+                    style={{ borderRadius: 0 }}
+                  >
+                    {saving ? (
+                      <>
+                        <Loader2 className="inline h-4 w-4 mr-2 animate-spin" />
+                        SAVING…
+                      </>
+                    ) : (
+                      "SAVE TOOL"
+                    )}
+                  </button>
+                </form>
+
+                {/* RIGHT: live preview */}
+                <div className="flex flex-col gap-3">
+                  <p className="swiss-label text-black">LIVE PREVIEW</p>
+                  <div
+                    className="relative flex-1 overflow-hidden border-4 border-black bg-white"
+                    style={{ minHeight: 360 }}
+                  >
+                    {previewUrl ? (
+                      <iframe
+                        key={previewUrl}
+                        src={previewUrl}
+                        title="Site preview"
+                        className="h-full w-full"
+                        style={{ minHeight: 360, pointerEvents: "none" }}
+                        sandbox="allow-scripts allow-same-origin"
+                      />
+                    ) : (
+                      <div
+                        className="flex h-full items-center justify-center text-black/20"
+                        style={{ minHeight: 360 }}
+                      >
+                        <div className="text-center">
+                          <ExternalLink className="mx-auto mb-3 h-12 w-12" />
+                          <p className="swiss-label">ENTER A URL TO SEE PREVIEW</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* ── search + tag filter ── */}
-        <div className="mb-6 flex flex-wrap items-center gap-3">
-          <div className="relative flex-1" style={{ minWidth: 200 }}>
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+        {/* ── SEARCH + TAG FILTER ── */}
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+          <div className="relative flex-1" style={{ minWidth: 240 }}>
+            <Search className="absolute left-0 top-1/2 h-5 w-5 -translate-y-1/2 text-black/40" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search tools…"
-              className="w-full rounded-full border border-zinc-200 bg-white py-2 pl-9 pr-4 text-sm text-zinc-900 outline-none focus:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500"
+              placeholder="SEARCH TOOLS..."
+              className="w-full border-b-2 border-black bg-transparent py-3 pl-8 pr-4 text-sm font-medium uppercase tracking-wide placeholder:text-black/30 focus:outline-none focus:border-[#FF3000] transition-colors duration-150"
+              style={{ borderRadius: 0 }}
             />
           </div>
 
@@ -279,23 +285,25 @@ export default function Home() {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setActiveTag(null)}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-150 border-2 ${
                   activeTag === null
-                    ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900"
-                    : "border border-zinc-200 text-zinc-600 hover:border-zinc-400 dark:border-zinc-700 dark:text-zinc-400"
+                    ? "bg-black text-white border-black"
+                    : "bg-white text-black border-black hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000]"
                 }`}
+                style={{ borderRadius: 0 }}
               >
-                All
+                ALL
               </button>
               {allTags.map((t) => (
                 <button
                   key={t}
                   onClick={() => setActiveTag(activeTag === t ? null : t)}
-                  className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium transition ${
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-150 border-2 ${
                     activeTag === t
-                      ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900"
-                      : "border border-zinc-200 text-zinc-600 hover:border-zinc-400 dark:border-zinc-700 dark:text-zinc-400"
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-black border-black hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000]"
                   }`}
+                  style={{ borderRadius: 0 }}
                 >
                   <Tag className="h-3 w-3" />
                   {t}
@@ -305,25 +313,33 @@ export default function Home() {
           )}
         </div>
 
-        {/* ── tool grid ── */}
+        {/* ── TOOL GRID ── */}
         {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+          <div className="flex justify-center py-24">
+            <Loader2 className="h-12 w-12 animate-spin text-black" />
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 text-zinc-400">
-            <ExternalLink className="mb-4 h-12 w-12 opacity-20" />
-            <p className="text-sm">
+          <div className="flex flex-col items-center justify-center py-32 text-black/40 border-4 border-black bg-[#F2F2F2] swiss-dots">
+            <ExternalLink className="mb-6 h-16 w-16" />
+            <p className="swiss-label text-lg">
               {tools.length === 0
-                ? "No tools saved yet. Add your first one!"
-                : "No tools match your search."}
+                ? "NO TOOLS SAVED YET. ADD YOUR FIRST ONE!"
+                : "NO TOOLS MATCH YOUR SEARCH."}
             </p>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((tool) => (
-              <ToolCard key={tool.id} tool={tool} onDelete={handleDelete} />
-            ))}
+          <div>
+            <div className="mb-6 flex items-baseline gap-4">
+              <span className="swiss-label text-[#FF3000] tracking-[0.2em]">03.</span>
+              <h2 className="swiss-heading text-2xl md:text-4xl">
+                COLLECTION ({filtered.length})
+              </h2>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((tool) => (
+                <ToolCard key={tool.id} tool={tool} onDelete={handleDelete} />
+              ))}
+            </div>
           </div>
         )}
       </main>
@@ -342,11 +358,11 @@ function ToolCard({
   const [showPreview, setShowPreview] = useState(false);
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="group relative flex flex-col overflow-hidden border-4 border-black bg-white transition-all duration-200 hover:translate-x-1 hover:-translate-y-1">
       {/* preview thumbnail — click to expand */}
       <button
         onClick={() => setShowPreview((v) => !v)}
-        className="relative h-36 w-full flex-none overflow-hidden bg-zinc-100 dark:bg-zinc-800"
+        className="relative h-48 w-full flex-none overflow-hidden bg-[#F2F2F2] swiss-diagonal border-b-4 border-black"
         title={showPreview ? "Click to collapse preview" : "Click to expand preview"}
       >
         {showPreview ? (
@@ -354,61 +370,65 @@ function ToolCard({
             src={tool.url}
             title={`${tool.name} preview`}
             className="h-full w-full"
-            style={{ pointerEvents: "none", transform: "scale(0.8)", transformOrigin: "top left", width: "125%", height: "125%" }}
+            style={{
+              pointerEvents: "none",
+              transform: "scale(0.75)",
+              transformOrigin: "top left",
+              width: "133%",
+              height: "133%",
+            }}
             sandbox="allow-scripts allow-same-origin"
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <ExternalLink className="h-8 w-8 text-zinc-300 dark:text-zinc-600" />
-            <span className="ml-2 text-xs text-zinc-400 dark:text-zinc-500">
-              Click to preview
-            </span>
+          <div className="flex h-full flex-col items-center justify-center gap-3">
+            <ExternalLink className="h-10 w-10 text-black/20" />
+            <span className="swiss-label text-xs text-black/40">CLICK TO PREVIEW</span>
           </div>
         )}
       </button>
 
       {/* content */}
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-zinc-900 leading-tight dark:text-zinc-50">
+      <div className="flex flex-1 flex-col gap-3 p-6">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="flex-1 text-xl font-black uppercase tracking-tight leading-tight">
             {tool.name}
           </h3>
-          <div className="flex shrink-0 items-center gap-1.5">
+          <div className="flex shrink-0 items-center gap-2">
             <a
               href={tool.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
+              className="text-black transition-colors duration-150 hover:text-[#FF3000] focus-visible:outline-none focus-visible:text-[#FF3000]"
               title="Open site"
             >
-              <ExternalLink className="h-4 w-4" />
+              <ExternalLink className="h-5 w-5" />
             </a>
             <button
               onClick={() => onDelete(tool.id)}
-              className="text-zinc-300 hover:text-red-500 dark:text-zinc-600 dark:hover:text-red-400"
+              className="text-black/30 transition-colors duration-150 hover:text-[#FF3000] focus-visible:outline-none focus-visible:text-[#FF3000]"
               title="Delete tool"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-5 w-5" />
             </button>
           </div>
         </div>
 
-        <p className="text-xs text-zinc-400 truncate dark:text-zinc-500">
+        <p className="text-xs font-medium uppercase tracking-wide text-black/40 truncate border-b border-black/10 pb-2">
           {tool.url}
         </p>
 
         {tool.description && (
-          <p className="text-sm text-zinc-600 leading-relaxed dark:text-zinc-400 line-clamp-2">
+          <p className="text-sm leading-relaxed text-black/70 line-clamp-3">
             {tool.description}
           </p>
         )}
 
         {tool.tags.length > 0 && (
-          <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
+          <div className="mt-auto flex flex-wrap gap-2 pt-4 border-t-2 border-black/10">
             {tool.tags.map((t) => (
               <span
                 key={t}
-                className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+                className="bg-[#F2F2F2] border border-black/20 px-3 py-1 text-xs font-bold uppercase tracking-wider"
               >
                 {t}
               </span>
