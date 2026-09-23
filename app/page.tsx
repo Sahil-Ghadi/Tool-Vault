@@ -351,37 +351,24 @@ function ToolCard({
   tool: Tool;
   onDelete: (id: string) => void;
 }) {
-  const [showPreview, setShowPreview] = useState(false);
-
   return (
     <div className="group relative flex flex-col overflow-hidden border-4 border-black bg-white transition-all duration-200 hover:translate-x-1 hover:-translate-y-1">
-      {/* preview thumbnail — click to expand */}
-      <button
-        onClick={() => setShowPreview((v) => !v)}
-        className="relative h-48 w-full flex-none overflow-hidden bg-[#F2F2F2] swiss-diagonal border-b-4 border-black"
-        title={showPreview ? "Click to collapse preview" : "Click to expand preview"}
-      >
-        {showPreview ? (
-          <iframe
-            src={tool.url}
-            title={`${tool.name} preview`}
-            className="h-full w-full"
-            style={{
-              pointerEvents: "none",
-              transform: "scale(0.75)",
-              transformOrigin: "top left",
-              width: "133%",
-              height: "133%",
-            }}
-            sandbox="allow-scripts allow-same-origin"
-          />
-        ) : (
-          <div className="flex h-full flex-col items-center justify-center gap-3">
-            <ExternalLink className="h-10 w-10 text-black/20" />
-            <span className="swiss-label text-xs text-black/40">CLICK TO PREVIEW</span>
-          </div>
-        )}
-      </button>
+      {/* preview thumbnail — automatic preview */}
+      <div className="relative h-48 w-full flex-none overflow-hidden bg-[#F2F2F2] swiss-diagonal border-b-4 border-black">
+        <iframe
+          src={tool.url}
+          title={`${tool.name} preview`}
+          className="h-full w-full"
+          style={{
+            pointerEvents: "none",
+            transform: "scale(0.75)",
+            transformOrigin: "top left",
+            width: "133%",
+            height: "133%",
+          }}
+          sandbox="allow-scripts allow-same-origin"
+        />
+      </div>
 
       {/* content */}
       <div className="flex flex-1 flex-col gap-3 p-6">
