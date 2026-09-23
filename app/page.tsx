@@ -115,25 +115,23 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       {/* ── HEADER ── */}
       <header className="sticky top-0 z-50 bg-white border-b-4 border-black">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-6 flex items-end justify-between gap-8">
-          <div className="flex-1">
-            <div className="flex items-baseline gap-4">
-              <span className="swiss-label text-[#FF3000] tracking-[0.2em]">01.</span>
-              <h1 className="swiss-heading text-4xl md:text-6xl lg:text-7xl">
-                TOOL VAULT
-              </h1>
-            </div>
-            <p className="mt-4 text-sm md:text-base max-w-xl uppercase tracking-wide font-medium">
+        <div className="mx-auto max-w-7xl px-6 lg:px-12 py-6 flex items-center justify-between gap-6">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <h1 className="swiss-heading text-2xl md:text-4xl lg:text-5xl flex-none">
+              TOOL VAULT
+            </h1>
+            <span className="hidden md:block text-black/30 flex-none">—</span>
+            <p className="hidden md:block text-xs lg:text-sm uppercase tracking-wide font-medium truncate">
               YOUR PERSONAL COLLECTION OF DISCOVERED TOOLS
             </p>
           </div>
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="flex-none h-16 px-8 bg-black text-white uppercase tracking-widest text-xs font-bold transition-all duration-150 hover:bg-[#FF3000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3000] focus-visible:ring-offset-2"
+            className="flex-none h-12 md:h-14 px-6 md:px-8 bg-black text-white uppercase tracking-widest text-xs font-bold transition-all duration-150 hover:bg-[#FF3000] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF3000] focus-visible:ring-offset-2"
             style={{ borderRadius: 0 }}
           >
             <Plus className="inline h-4 w-4 mr-2 transition-transform duration-200" style={{ transform: showForm ? 'rotate(45deg)' : 'rotate(0deg)' }} />
-            {showForm ? "CLOSE" : "ADD TOOL"}
+            {showForm ? "CLOSE" : "ADD"}
           </button>
         </div>
       </header>
@@ -143,8 +141,7 @@ export default function Home() {
         {showForm && (
           <div className="mb-12 border-4 border-black bg-[#F2F2F2] swiss-grid-pattern relative">
             <div className="p-8 md:p-12">
-              <div className="mb-8 flex items-baseline gap-4">
-                <span className="swiss-label text-[#FF3000] tracking-[0.2em]">02.</span>
+              <div className="mb-8">
                 <h2 className="swiss-heading text-2xl md:text-4xl">ADD NEW TOOL</h2>
               </div>
 
@@ -329,8 +326,7 @@ export default function Home() {
           </div>
         ) : (
           <div>
-            <div className="mb-6 flex items-baseline gap-4">
-              <span className="swiss-label text-[#FF3000] tracking-[0.2em]">03.</span>
+            <div className="mb-6">
               <h2 className="swiss-heading text-2xl md:text-4xl">
                 COLLECTION ({filtered.length})
               </h2>
